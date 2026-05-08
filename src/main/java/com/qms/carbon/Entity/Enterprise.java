@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.experimental.Accessors;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * 企业表 Entity
@@ -57,4 +58,10 @@ public class Enterprise implements Serializable {
 
     @TableField(fill = FieldFill.INSERT_UPDATE)
     private LocalDateTime updateTime;
+
+    /**
+     * 非数据库字段：该企业下的员工/用户列表
+     */
+    @TableField(exist = false)
+    private List<User> userList;
 }

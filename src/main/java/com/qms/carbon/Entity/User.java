@@ -45,7 +45,7 @@ public class User implements Serializable {
     /**
      * 所属企业ID
      */
-    private Long orgId;
+    private Long orgId; // 所属企业ID，核心外键字段
 
     private String city;
 
@@ -71,6 +71,12 @@ public class User implements Serializable {
 
     @TableField(fill = FieldFill.INSERT_UPDATE)
     private LocalDateTime updateTime;
+
+    /**
+     * 非数据库字段：关联的企业信息
+     */
+    @TableField(exist = false)
+    private Enterprise enterprise;
 
     /**
      * 逻辑删除标志（0:未删除，1:已删除）
