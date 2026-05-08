@@ -7,7 +7,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class CarbonApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(CarbonApplication.class, args);
+
+        SpringApplication.run(CarbonApplication.class, args
+        );
     }
 
 }
