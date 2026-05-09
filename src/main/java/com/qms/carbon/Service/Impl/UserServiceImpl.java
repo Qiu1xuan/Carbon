@@ -1,5 +1,6 @@
 package com.qms.carbon.Service.Impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.qms.carbon.Entity.Enterprise;
@@ -81,6 +82,29 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             user.setEnterprise(enterprise);
         }
 
+        return user;
+    }
+
+    @Override
+    public User login(String username, String password) {
+        // 构建查询条件
+        LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(User::getUsername, username)
+                .eq(User::getPassword, password) // 按照文档约定，开发阶段使用明文密码
+                .eq(User::getDeleted, 0);
+
+        User user = this.getOne(queryWrapper);
+
+        if (user == null) {
+            throw new RuntimeException("用户名或密码错误");
+        }
+
+        if (user.getStatus() != 1) {
+            throw new RuntimeException("该账号已被冻结，请联系管理员");
+        }
+
+        // 擦除返回给前端的密码，保证安全性
+        user.setPassword(null);
         return user;
     }
 }
