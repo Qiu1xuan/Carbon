@@ -19,7 +19,7 @@ public class CarbonRecordController {
 
     /**
      * 上报行为接口
-     * 示例：Get /api/record/report?userId=2&type=WALK&value=5000
+     * 示例：POST /api/record/report?userId=2&type=WALK&value=5000
      */
     @GetMapping("/report")
     public Result<CarbonRecord> report(@RequestParam Long userId,
