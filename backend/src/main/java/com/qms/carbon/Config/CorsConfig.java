@@ -15,5 +15,6 @@ public class CorsConfig implements WebMvcConfigurer {
                 .maxAge(168000) // 预检间隔时间
                 .allowedHeaders("*") // 允许头部设置
                 .allowCredentials(true); // 是否发送cookie
+
     }
 }

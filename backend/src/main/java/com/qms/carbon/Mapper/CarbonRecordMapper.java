@@ -8,9 +8,39 @@ import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 public interface CarbonRecordMapper extends BaseMapper<CarbonRecord> {
+
+    // 个人概览数据：今日、总计
+    @Select("SELECT " +
+            "IFNULL(SUM(reduction), 0) as totalReduction, " +
+            "IFNULL(SUM(points_earned), 0) as totalPoints, " +
+            "(SELECT IFNULL(SUM(reduction), 0) FROM carbon_record WHERE user_id = #{userId} AND TO_DAYS(record_time) = TO_DAYS(NOW()) AND deleted=0) as todayReduction " +
+            "FROM carbon_record WHERE user_id = #{userId} AND deleted = 0")
+    Map<String, Object> getUserOverview(@Param("userId") Long userId);
+
+    // 多维度统计：支持周(week)、月(month)、年(year)视图
+    @Select("<script>" +
+            "SELECT " +
+            "<choose>" +
+            "  <when test='range == \"year\"'> DATE_FORMAT(record_time, '%Y-%m') </when>" +
+            "  <otherwise> DATE_FORMAT(record_time, '%Y-%m-%d') </otherwise>" +
+            "</choose> AS dateLabel, " +
+            "SUM(reduction) AS totalValue " +
+            "FROM carbon_record " +
+            "WHERE user_id = #{userId} AND deleted = 0 " +
+            "AND record_time >= " +
+            "<choose>" +
+            "  <when test='range == \"week\"'> DATE_SUB(CURDATE(), INTERVAL 7 DAY) </when>" +
+            "  <when test='range == \"month\"'> DATE_SUB(CURDATE(), INTERVAL 30 DAY) </when>" +
+            "  <otherwise> DATE_SUB(CURDATE(), INTERVAL 1 YEAR) </otherwise>" +
+            "</choose>" +
+            "GROUP BY dateLabel ORDER BY dateLabel ASC" +
+            "</script>")
+    List<Map<String, Object>> getStatsByRange(@Param("userId") Long userId, @Param("range") String range);
+
 
     /**
      * 【大一统排行接口】：获取个人排行榜 (支持按积分排序)
@@ -39,4 +69,13 @@ public interface CarbonRecordMapper extends BaseMapper<CarbonRecord> {
                                            @Param("orgId") Long orgId,
                                            @Param("startDate") String startDate,
                                            @Param("endDate") String endDate);
+
+    // 统计个人最近7天的每日减排量总和（克）
+    @Select("SELECT DATE(record_time) as date, SUM(reduction) as total " +
+            "FROM carbon_record " +
+            "WHERE user_id = #{userId} AND deleted = 0 " +
+            "GROUP BY DATE(record_time) ORDER BY date ASC LIMIT 7")
+    List<Map<String, Object>> getWeeklyStats(Long userId);
+
+
 }

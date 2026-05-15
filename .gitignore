@@ -1,0 +1,61 @@
+# ========== 通用 ==========
+.DS_Store
+Thumbs.db
+*.swp
+*.lock
+*.log
+
+# ========== 后端（Java / Maven） ==========
+# 编译输出
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
+.mvn/timing.properties
+
+# IDE 文件
+.idea/
+*.iml
+*.iws
+*.ipr
+.classpath
+.project
+.settings/
+.vscode/
+.sts4-cache
+
+# 日志
+*.log
+
+# 本地配置文件（可能包含个人路径）
+local.properties
+
+# ========== 前端（HarmonyOS / DevEco） ==========
+# 依赖包（必须忽略，通过 ohpm install 还原）
+oh_modules/
+node_modules/
+
+# 构建缓存/产物
+.hvigor/
+build/
+entry/build/
+entry/.cxx/
+*.hap
+*.app
+*.hsp
+
+# IDE 配置
+.idea/
+*.iml
+/.previewer
+
+# 本地 SDK 配置（每台机器不同）
+local.properties
+
+# 测试相关
+coverage/
+.hvigor/outputs/

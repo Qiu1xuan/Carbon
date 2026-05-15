@@ -1,0 +1,218 @@
+{
+	"info": {
+		"_postman_id": "d89724b4-7589-49d5-852a-17abd80e1b98",
+		"name": "Carbon测试",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "测试1：获取可用行为类型（因子列表）",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "http://localhost:8080/api/factor/factors",
+				"description": "获取可用行为类型（因子列表）"
+			},
+			"response": []
+		},
+		{
+			"name": "测试 2：核心核算——当前行为上报（使用 v2.0 因子）",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"userId\": 2,\r\n  \"type\": \"WALK\",\r\n  \"value\": 10000\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:8080/api/record/report"
+			},
+			"response": []
+		},
+		{
+			"name": "测试 3：核心核算——补报历史行为（自动匹配 v1.0 因子）",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"userId\": 2,\r\n  \"type\": \"WALK\",\r\n  \"value\": 10000,\r\n  \"occurTime\": \"2025-05-20T10:00:00\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:8080/api/record/report"
+			},
+			"response": []
+		},
+		{
+			"name": "测试 4：看板数据统计（Dashboard）\n",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"code\": 200,\r\n  \"data\": {\r\n    \"totalReduction\": 4895, // 初始数据 + 刚才上报的 1000 + 600\r\n    \"totalPoints\": 49,\r\n    \"todayReduction\": 1000  // 只有今天上报的那一笔\r\n  }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:8080/api/record/overview/2"
+			},
+			"response": []
+		},
+		{
+			"name": "测试 5：多维度统计曲线（周视图）",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"code\": 200,\r\n  \"data\": [\r\n    { \"dateLabel\": \"2026-05-10\", \"totalValue\": 0 },\r\n    { \"dateLabel\": \"2026-05-15\", \"totalValue\": 1000 } // 今天的聚合数据\r\n  ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/record/stats?userId=2&range=week",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"record",
+						"stats"
+					],
+					"query": [
+						{
+							"key": "userId",
+							"value": "2"
+						},
+						{
+							"key": "range",
+							"value": "week"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "测试 6：历史记录分页",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"code\": 200,\r\n  \"data\": {\r\n    \"records\": [\r\n      { \"id\": 10, \"activityType\": \"WALK\", \"reduction\": 1000 },\r\n      { \"id\": 9, \"activityType\": \"WALK\", \"reduction\": 600 }\r\n    ],\r\n    \"total\": 5,\r\n    \"size\": 2,\r\n    \"current\": 1\r\n  }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/record/history?userId=2&current=1&size=2",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"record",
+						"history"
+					],
+					"query": [
+						{
+							"key": "userId",
+							"value": "2"
+						},
+						{
+							"key": "current",
+							"value": "1"
+						},
+						{
+							"key": "size",
+							"value": "2"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "测试 7：全平台/同城排行榜",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/record/rank?city=上海&range=all",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"record",
+						"rank"
+					],
+					"query": [
+						{
+							"key": "city",
+							"value": "上海"
+						},
+						{
+							"key": "range",
+							"value": "all"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "测试 8：删除/撤销记录",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": "http://localhost:8080/api/record/1"
+			},
+			"response": []
+		}
+	]
+}
