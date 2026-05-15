@@ -31,4 +31,6 @@ public interface UserService extends IService<User> {
      * @return 带有企业信息的用户对象
      */
     User getUserWithEnterprise(Long userId);
+
+    User login(String username, String password);
 }
