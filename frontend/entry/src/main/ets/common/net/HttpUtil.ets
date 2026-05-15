@@ -3,7 +3,7 @@ import { Constants } from '../utils/Constants';
 
 interface ApiResponse<T> {
   code: number;
-  msg: string;
+  message: string;
   data: T;
 }
 
@@ -34,7 +34,7 @@ export class HttpUtil {
         if (result.code === 200) {
           return result.data;
         } else {
-          throw new Error(result.msg || '请求失败');
+          throw new Error(result.message || '请求失败');
         }
       } else {
         throw new Error(`HTTP ${response.responseCode}`);
@@ -70,7 +70,7 @@ export class HttpUtil {
         if (result.code === 200) {
           return result.data;
         } else {
-          throw new Error(result.msg || '请求失败');
+          throw new Error(result.message || '请求失败');
         }
       } else {
         throw new Error(`HTTP ${response.responseCode}`);
