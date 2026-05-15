@@ -1,0 +1,5 @@
+﻿.idea/
+target/
+frontend/.hvigor/
+frontend/oh_modules/
+frontend/local.properties
