@@ -2,6 +2,7 @@ import router from '@ohos.router';
 import { User } from '../common/entity/User';
 import { HttpUtil } from '../common/net/HttpUtil';
 
+
 @Entry
 @Component
 struct MainPage {
@@ -44,13 +45,43 @@ struct MainPage {
 @Component
 struct RecordPage {
   build() {
-    Column() {
-      Text('行为上报页面（待开发）').fontSize(20).margin({ top: 50 })
-      Text('组员B：对接核算接口').fontSize(14).fontColor('#666')
+    Column({ space: 20 }) {
+      Text('低碳生活助手').fontSize(24).fontWeight(FontWeight.Bold).margin({ top: 40 })
+
+      // 功能入口 1：进入看板
+      Button("查看碳足迹看板")
+        .width('80%')
+        .height(50)
+        .backgroundColor('#4CAF50') // 绿色风格
+        .onClick(() => {
+          router.pushUrl({ url: 'pages/DashboardPage' })
+        })
+
+      // 功能入口 2：去上报
+      Button("立即上报行为")
+        .width('80%')
+        .height(50)
+        .backgroundColor('#007DFF') // 蓝色风格
+        .onClick(() => {
+          router.pushUrl({ url: 'pages/ReportPage' })
+        })
+
+      Text('记录每一次减排，为地球贡献力量')
+        .fontSize(14)
+        .fontColor('#999')
+        .margin({ top: 10 })
     }
     .width('100%')
     .height('100%')
-    .justifyContent(FlexAlign.Center)
+    .justifyContent(FlexAlign.Center)  // 实现垂直居中
+    .alignItems(HorizontalAlign.Center) // 实现水平居中
+    .linearGradient({
+      colors: [
+        [0xF0FDF4, 0.0], // 顶部浅绿
+        [0xFFFFFF, 0.5], // 中间白色
+        [0xECFDF5, 1.0]  // 底部淡绿
+      ]
+    })
   }
 }
 
@@ -143,6 +174,8 @@ struct ProfilePage {
     }
     .width('100%')
     .height('100%')
+
+
   }
 
   // 触发请求后端 AI 接口
